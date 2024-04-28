@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     public float jumpForce = 10f;
+    public int playerLife = 3;
 
     public Rigidbody2D rb;
 
@@ -29,14 +31,26 @@ public class Player : MonoBehaviour
     }
     void OnTriggerEnter2D (Collider2D col)
     {
+        if (col.tag == "ColorChanger")
+        {
+            SetRandomColor();
+            Destroy(col.gameObject);
+            return;
+        }
+
         if (col.tag != currentColor)
         {
             Debug.Log("Game Over!");
+            playerLife -= 1;
+        }
+        if (playerLife <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
     void SetRandomColor ()
     {
-        int index = Random.Range(0, 3);
+        int index = Random.Range(0, 4);
 
         switch(index)
         {
